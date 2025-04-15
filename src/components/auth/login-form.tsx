@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { auth, googleProvider } from "../firebase";
+import { auth, googleProvider } from "../../firebase"
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 

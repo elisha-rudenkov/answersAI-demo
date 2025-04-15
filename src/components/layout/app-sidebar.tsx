@@ -4,8 +4,8 @@ import {
 } from "lucide-react"
 import { useLocation, matchPath } from 'react-router-dom'
 
-import { NavMain } from "@/components/nav-main"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from "@/components/navigation/nav-main"
+import { NavUser } from "@/components/navigation/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -138,7 +138,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar
-      className="top-(--header-height) h-[calc(100svh-var(--header-height))]! w-[80px] md:w-[80px] lg:w-[80px] bg-sidebar dark:bg-sidebar"
+      className="top-(--header-height) h-[calc(100svh-var(--header-height))]! w-[80px] md:w-[80px] lg:w-[80px] bg-sidebar dark:bg-sidebar sidebar"
       variant="sidebar"
       collapsible="offcanvas"
       {...props}
