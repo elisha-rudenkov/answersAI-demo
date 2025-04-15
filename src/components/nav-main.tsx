@@ -1,6 +1,7 @@
 "use client"
 
 import { ChevronRight, type LucideIcon } from "lucide-react"
+import { useLocation } from 'react-router-dom'
 
 import {
   Collapsible,
@@ -34,42 +35,35 @@ export function NavMain({
 }) {
   return (
     <SidebarGroup>
-      <SidebarMenu>
-        {items.map((item) => (
-          <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={item.title}>
-                <a href={item.url}>
-                  <item.icon />
-                  <span className="md:hidden lg:hidden">{item.title}</span>
-                </a>
-              </SidebarMenuButton>
-              {item.items?.length ? (
-                <>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuAction className="data-[state=open]:rotate-90">
-                      <ChevronRight />
-                      <span className="sr-only">Toggle</span>
-                    </SidebarMenuAction>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <SidebarMenuSub>
-                      {item.items?.map((subItem) => (
-                        <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
-                              <span>{subItem.title}</span>
-                            </a>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      ))}
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                </>
-              ) : null}
-            </SidebarMenuItem>
-          </Collapsible>
-        ))}
+      <SidebarMenu className="space-y-10">
+        {items.map((item) => {
+          // Use the isActive property directly from the item
+          const isActive = !!item.isActive;
+                          
+          return (
+            <Collapsible key={item.title} asChild defaultOpen={isActive}>
+              <SidebarMenuItem className="flex items-center justify-center">
+                <SidebarMenuButton 
+                  asChild 
+                  tooltip={item.title} 
+                  isActive={isActive}
+                  className={`${isActive ? 
+                    "border border-nav-active-border bg-nav-active-bg" : 
+                    ""} h-10 md:h-10 md:w-10 lg:h-10 lg:w-10 min-h-[40px] md:min-h-[40px] md:min-w-[40px] lg:min-h-[40px] lg:min-w-[40px] p-0 md:p-0 lg:p-0 md:!w-10 lg:!w-10`}
+                >
+                  <a 
+                    href={item.url} 
+                    className="flex h-full w-full items-center justify-start md:justify-center lg:justify-center group"
+                    data-active={isActive}
+                  >
+                    <item.icon />
+                    <span className="ml-2 md:hidden lg:hidden">{item.title}</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </Collapsible>
+          );
+        })}
       </SidebarMenu>
     </SidebarGroup>
   )
