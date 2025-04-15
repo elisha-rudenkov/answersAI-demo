@@ -3,6 +3,7 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import { ThemeProvider } from './components/theme-provider';
+import { AppLayout } from './components/AppLayout';
 import './styles/Dashboard.css';
 import './styles/App.css';
 
@@ -11,12 +12,17 @@ function App() {
     <ThemeProvider>
       <div className="app">
         <Routes>
-          <Route path="/" element={
+          <Route path="/login" element={<Login />} />
+          <Route path="/*" element={
             <ProtectedRoute>
-              <Dashboard />
+              <AppLayout>
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  {/* Add other routes here */}
+                </Routes>
+              </AppLayout>
             </ProtectedRoute>
           } />
-          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
     </ThemeProvider>
