@@ -25,6 +25,19 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { ThemeToggle } from "@/components/theme/theme-toggle"
+import { auth } from "@/firebase"
+import { signOut } from "firebase/auth"
+import { useNavigate } from "react-router-dom"
+
+// Function to get initials from user's name
+function getInitials(name: string): string {
+  if (!name) return "U";
+  
+  const names = name.split(' ');
+  if (names.length === 1) return names[0].charAt(0).toUpperCase();
+  
+  return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase();
+}
 
 export function NavUser({
   user,
@@ -36,6 +49,17 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const navigate = useNavigate()
+  const userInitials = getInitials(user.name)
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth)
+      navigate("/login") // Redirect to login page after logout
+    } catch (error) {
+      console.error("Logout failed:", error)
+    }
+  }
 
   return (
     <SidebarMenu>
@@ -48,7 +72,7 @@ export function NavUser({
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className="rounded-lg">{userInitials}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight md:hidden lg:hidden">
                 <span className="truncate font-medium">{user.name}</span>
@@ -67,7 +91,7 @@ export function NavUser({
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">{userInitials}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>
@@ -79,7 +103,7 @@ export function NavUser({
             <DropdownMenuSeparator />
             <ThemeToggle />
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />
               Log out
             </DropdownMenuItem>

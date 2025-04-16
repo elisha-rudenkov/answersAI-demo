@@ -3,6 +3,8 @@ import {
   type LucideIcon,
 } from "lucide-react"
 import { useLocation, matchPath } from 'react-router-dom'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '@/firebase'
 
 import { NavMain } from "@/components/navigation/nav-main"
 import { NavUser } from "@/components/navigation/nav-user"
@@ -81,6 +83,7 @@ const createIconComponent = (IconComponent: React.FC<React.SVGProps<SVGSVGElemen
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
+  const [user] = useAuthState(auth);
   
   // Check if route is active with proper pattern matching
   const isRouteActive = (path: string): boolean => {
@@ -97,11 +100,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   };
   
   const data = {
-    user: {
-      name: "shadcn",
-      email: "m@example.com",
-      avatar: "/avatars/shadcn.jpg",
-    },
     navMain: [
       {
         title: "Home",
@@ -136,6 +134,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ]
   };
 
+  // Prepare user data for NavUser component
+  const userData = user ? {
+    name: user.displayName || "User",
+    email: user.email || "",
+    avatar: user.photoURL || "/avatars/default.jpg",
+  } : {
+    name: "Guest",
+    email: "",
+    avatar: "/avatars/default.jpg",
+  };
+
   return (
     <Sidebar
       className="top-(--header-height) h-[calc(100svh-var(--header-height))]! w-[80px] md:w-[80px] lg:w-[80px] bg-sidebar dark:bg-sidebar sidebar"
@@ -147,7 +156,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={userData} />
       </SidebarFooter>
     </Sidebar>
   )
