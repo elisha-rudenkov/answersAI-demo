@@ -133,3 +133,14 @@
     font-family: 'Inter', sans-serif;
   }
 }
+
+/* Custom overrides */
+.nav-button:hover {
+  background-color: #5A5A5A !important;
+  color: white !important;
+}
+
+button.nav-button:hover {
+  background-color: #5A5A5A !important;
+  color: white !important;
+}

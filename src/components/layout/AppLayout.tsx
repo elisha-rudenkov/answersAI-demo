@@ -4,7 +4,6 @@ import { SiteHeader } from "./site-header"
 import { SidebarInset, SidebarProvider } from "../ui/sidebar"
 import { useLoadingTransition } from "../ui/loading-transition"
 import { Loader } from "../ui/loader"
-import { Outlet } from "react-router-dom"
 
 interface AppLayoutProps {
   children: React.ReactNode
