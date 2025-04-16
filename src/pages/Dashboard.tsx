@@ -1,6 +1,7 @@
 "use client"
 
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts"
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts"
+import { VariablesDrawer } from "@/components/VariablesDrawer"
 
 export default function Page() {
   // Mock data for the chart
@@ -30,9 +31,7 @@ export default function Page() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </button>
-          <button className="rounded-md border border-border p-2">
-            <span className="text-sm font-medium text-white">Edit Variables</span>
-          </button>
+          <VariablesDrawer />
         </div>
       </div>
 
@@ -82,12 +81,7 @@ export default function Page() {
           </div>
           <div className="w-full md:w-1/2 flex items-center justify-between mt-4 md:mt-0">
             <h2 className="text-xl font-medium text-white">Key Performance Indicators</h2>
-            <button className="flex items-center gap-1 rounded-md border border-border px-2 py-1 text-sm text-white">
-              <span>Variables</span>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-            </button>
+            <VariablesDrawer />
           </div>
         </div>
 
@@ -108,61 +102,61 @@ export default function Page() {
               
               {/* Chart */}
               <div className="mt-12">
-                <AreaChart
-                  width={500}
-                  height={260}
-                  data={chartData}
-                  margin={{
-                    top: 5,
-                    right: 10,
-                    left: 0,
-                    bottom: 0,
-                  }}
-                >
-                  <defs>
-                    <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#C9FF3B" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#C9FF3B" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid horizontal={true} vertical={false} stroke="rgba(255,255,255,0.1)" />
-                  <XAxis 
-                    dataKey="month" 
-                    stroke="#666" 
-                    axisLine={false}
-                    style={{fontSize: '12px'}}
-                    tick={{fill: '#999'}}
-                    tickLine={false}
-                    dy={10}
-                  />
-                  <YAxis 
-                    stroke="#666" 
-                    axisLine={false}
-                    style={{fontSize: '12px'}}
-                    tick={{fill: '#999'}}
-                    tickFormatter={(value: number) => `$${value/1000}k`}
-                    tickCount={5}
-                    domain={['dataMin - 5000', 'dataMax + 10000']}
-                    tickLine={false}
-                  />
-                  <Tooltip 
-                    cursor={{stroke: '#C9FF3B', strokeWidth: 1, strokeDasharray: '5 5'}}
-                    contentStyle={{backgroundColor: '#1e1e1e', border: '1px solid #333', borderRadius: '4px'}}
-                    labelStyle={{color: '#ccc'}}
-                    itemStyle={{color: '#C9FF3B'}}
-                    formatter={(value: number) => [`$${value}`, 'Value']}
-                  />
-                  <Area 
-                    type="monotone" 
-                    dataKey="value" 
-                    stroke="#C9FF3B" 
-                    fillOpacity={1}
-                    fill="url(#colorValue)" 
-                    strokeWidth={2}
-                    dot={{ r: 4, fill: "#C9FF3B", stroke: "#C9FF3B", strokeWidth: 2 }}
-                    activeDot={{ r: 6, fill: "#C9FF3B", stroke: "#fff", strokeWidth: 2 }}
-                  />
-                </AreaChart>
+                <ResponsiveContainer width="100%" height={260}>
+                  <AreaChart
+                    data={chartData}
+                    margin={{
+                      top: 5,
+                      right: 10,
+                      left: 0,
+                      bottom: 0,
+                    }}
+                  >
+                    <defs>
+                      <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#C9FF3B" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="#C9FF3B" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid horizontal={true} vertical={false} stroke="rgba(255,255,255,0.1)" />
+                    <XAxis 
+                      dataKey="month" 
+                      stroke="#666" 
+                      axisLine={false}
+                      style={{fontSize: '12px'}}
+                      tick={{fill: '#999'}}
+                      tickLine={false}
+                      dy={10}
+                    />
+                    <YAxis 
+                      stroke="#666" 
+                      axisLine={false}
+                      style={{fontSize: '12px'}}
+                      tick={{fill: '#999'}}
+                      tickFormatter={(value: number) => `$${value/1000}k`}
+                      tickCount={5}
+                      domain={['dataMin - 5000', 'dataMax + 10000']}
+                      tickLine={false}
+                    />
+                    <Tooltip 
+                      cursor={{stroke: '#C9FF3B', strokeWidth: 1, strokeDasharray: '5 5'}}
+                      contentStyle={{backgroundColor: '#1e1e1e', border: '1px solid #333', borderRadius: '4px'}}
+                      labelStyle={{color: '#ccc'}}
+                      itemStyle={{color: '#C9FF3B'}}
+                      formatter={(value: number) => [`$${value}`, 'Value']}
+                    />
+                    <Area 
+                      type="monotone" 
+                      dataKey="value" 
+                      stroke="#C9FF3B" 
+                      fillOpacity={1}
+                      fill="url(#colorValue)" 
+                      strokeWidth={2}
+                      dot={{ r: 4, fill: "#C9FF3B", stroke: "#C9FF3B", strokeWidth: 2 }}
+                      activeDot={{ r: 6, fill: "#C9FF3B", stroke: "#fff", strokeWidth: 2 }}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
               </div>
             </div>
           </div>
