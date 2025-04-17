@@ -11,8 +11,7 @@ A modern web application for visualizing charging station data and analytics. Bu
 ### Installation
 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/answersai-demo.git
-cd answersai-demo
+git clone https://github.com/elisha-rudenkov/answersai-demo.git
 ```
 
 2. Install dependencies
@@ -20,7 +19,7 @@ cd answersai-demo
 pnpm install
 ```
 
-3. Environment Variables
+3. Environment Variables (if you want to deploy)
 Create a `.env` file in the root directory with the following variables (or use existing Firebase config in `firebase.ts`):
 ```
 VITE_FIREBASE_API_KEY=your_api_key
@@ -90,3 +89,8 @@ pnpm build
 ## License
 
 MIT
+
+# Time Spent 
+7hrs
+
+
