@@ -6,7 +6,6 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
@@ -14,9 +13,24 @@ import { useState, useRef, useEffect } from "react"
 
 export function VariablesDrawer() {
   const [selectedVariables, setSelectedVariables] = useState<string[]>(["Carbon 1", "Co2 Distribution"]);
-  const [showContextWindow, setShowContextWindow] = useState(false);
-  const [contextPosition, setContextPosition] = useState({ x: 0, y: 0 });
+  const [activeContextVariable, setActiveContextVariable] = useState<string | null>(null);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Variable descriptions for context windows
+  const variableDescriptions: Record<string, string> = {
+    "Carbon 1": "Carbon 1 represents the primary carbon footprint metric tracked by our system. It measures direct emissions from owned or controlled sources, helping organizations identify their largest environmental impacts.",
+    "Co2 Distribution": "But what truly sets Switch apart is its versatility. It can be used as a scooter, a bike, or even a skateboard, making it suitable for people of all ages. Whether you're a student, a professional, or a senior citizen, Switch adapts to your needs and lifestyle.",
+    "Fleet sizing": "Fleet sizing optimizes the number of vehicles required to meet service demands while minimizing operational costs. Our algorithm factors in peak usage patterns, maintenance schedules, and geographic distribution.",
+    "Parking Rate": "Parking Rate measures the frequency at which vehicles remain stationary within designated zones. Higher rates may indicate optimal placement or potential rebalancing opportunities.",
+    "Border Rate": "Border Rate tracks cross-boundary transportation patterns and associated tariffs. This metric helps identify cost-optimization opportunities for international logistics operations.",
+    "Request rate": "Request rate quantifies user demand frequency across different time periods and locations. This real-time data enables dynamic resource allocation and predictive capacity planning.",
+    "Variable 1-1": "This variable tracks key performance indicators for the first operational segment, providing insights into efficiency metrics and opportunities for process optimization.",
+    "Variable 1-2": "Variable 1-2 measures secondary impact factors that contribute to overall system performance. Adjusting this parameter affects downstream processes significantly.",
+    "Variable 1-3": "The third primary variable in our category 2 suite focuses on resource utilization patterns. Higher values indicate more efficient usage of available assets.",
+    "Variable 1-4": "This diagnostic metric provides early warnings for potential system bottlenecks. Monitoring this value helps prevent cascading failures in production environments.",
+    "Variable 1-5": "Variable 1-5 quantifies user engagement metrics across different platform touchpoints. Higher values correlate with improved retention and satisfaction scores.",
+    "Variable 1-6": "The final metric in our third category measures long-term sustainability impact. Optimizing this value balances immediate operational needs with environmental responsibility."
+  };
 
   const handleVariableSelect = (variable: string) => {
     if (selectedVariables.includes(variable)) {
@@ -31,16 +45,16 @@ export function VariablesDrawer() {
 
   const handleMouseEnter = (event: React.MouseEvent<HTMLDivElement>) => {
     const variable = (event.currentTarget as HTMLDivElement).getAttribute('data-variable');
-    if (variable === "Co2 Distribution") {
-      setContextPosition({ 
-        x: 0, 
-        y: 0 
-      });
+    if (variable) {
+      // Clear any existing timeout
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
       
-      // Set a timeout for 1.5 seconds
+      // Set a timeout for 500ms
       hoverTimeoutRef.current = setTimeout(() => {
-        setShowContextWindow(true);
-      }, 1500);
+        setActiveContextVariable(variable);
+      }, 500);
     }
   };
 
@@ -48,11 +62,13 @@ export function VariablesDrawer() {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
       hoverTimeoutRef.current = null;
-      setShowContextWindow(false);
     }
+    // Use a timeout that matches the CSS transition duration (300ms)
+    setTimeout(() => {
+      setActiveContextVariable(null);
+    }, 300);
   };
 
-  // Clean up timeout on unmount
   useEffect(() => {
     return () => {
       if (hoverTimeoutRef.current) {
@@ -119,6 +135,9 @@ export function VariablesDrawer() {
                 label="Carbon 1" 
                 selected={selectedVariables.includes("Carbon 1")}
                 onSelect={() => handleVariableSelect("Carbon 1")}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                dataVariable="Carbon 1"
               />
               <VariableTag 
                 label="Co2 Distribution" 
@@ -134,6 +153,9 @@ export function VariablesDrawer() {
                 active={true}
                 selected={selectedVariables.includes("Fleet sizing")}
                 onSelect={() => handleVariableSelect("Fleet sizing")}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                dataVariable="Fleet sizing"
                 checkIcon={true}
               />
             </div>
@@ -147,11 +169,17 @@ export function VariablesDrawer() {
                 label="Parking Rate" 
                 selected={selectedVariables.includes("Parking Rate")}
                 onSelect={() => handleVariableSelect("Parking Rate")}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                dataVariable="Parking Rate"
               />
               <VariableTag 
                 label="Border Rate" 
                 selected={selectedVariables.includes("Border Rate")}
                 onSelect={() => handleVariableSelect("Border Rate")}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                dataVariable="Border Rate"
                 checkIcon={true}
               />
               <VariableTag 
@@ -159,23 +187,35 @@ export function VariablesDrawer() {
                 active={true}
                 selected={selectedVariables.includes("Request rate")}
                 onSelect={() => handleVariableSelect("Request rate")}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                dataVariable="Request rate"
                 checkIcon={true}
               />
               <VariableTag 
                 label="Variable 1" 
                 selected={selectedVariables.includes("Variable 1-1")}
                 onSelect={() => handleVariableSelect("Variable 1-1")}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                dataVariable="Variable 1-1"
               />
               <VariableTag 
                 label="Variable 1" 
                 selected={selectedVariables.includes("Variable 1-2")}
                 onSelect={() => handleVariableSelect("Variable 1-2")}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                dataVariable="Variable 1-2"
               />
               <VariableTag 
                 label="Variable 1" 
                 active={true}
                 selected={selectedVariables.includes("Variable 1-3")}
                 onSelect={() => handleVariableSelect("Variable 1-3")}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                dataVariable="Variable 1-3"
                 checkIcon={true}
               />
             </div>
@@ -189,12 +229,18 @@ export function VariablesDrawer() {
                 label="Variable 1" 
                 selected={selectedVariables.includes("Variable 1-4")}
                 onSelect={() => handleVariableSelect("Variable 1-4")}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                dataVariable="Variable 1-4"
               />
               <VariableTag 
                 label="Variable 1" 
                 active={true}
                 selected={selectedVariables.includes("Variable 1-5")}
                 onSelect={() => handleVariableSelect("Variable 1-5")}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                dataVariable="Variable 1-5"
                 checkIcon={true}
               />
               <VariableTag 
@@ -202,42 +248,38 @@ export function VariablesDrawer() {
                 active={true}
                 selected={selectedVariables.includes("Variable 1-6")}
                 onSelect={() => handleVariableSelect("Variable 1-6")}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                dataVariable="Variable 1-6"
                 checkIcon={true}
               />
             </div>
           </div>
         </div>
 
-        {/* Co2 Distribution Context Window - With animation */}
-        <div 
-          className={`mt-4 border border-border rounded-md bg-black overflow-hidden transition-all duration-500 ease-in-out ${
-            showContextWindow 
-              ? 'max-h-[200px] opacity-100 translate-y-0' 
-              : 'max-h-0 opacity-0 translate-y-[-10px] border-opacity-0'
-          }`}
-        >
-          <div className="p-5">
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="font-medium text-white flex items-center">
-                Co2 Distribution
-                <svg className="w-5 h-5 ml-2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </h3>
+        {/* Context Window - Shows below variables but above collapsible sections */}
+        <div className={`mt-6 mb-6 transition-all duration-300 ease-in-out ${activeContextVariable ? 'opacity-100 max-h-[500px]' : 'opacity-0 max-h-0 overflow-hidden'}`}>
+          {activeContextVariable && (
+            <div className="border border-border rounded-md bg-black">
+              <div className="p-5">
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="font-medium text-white flex items-center">
+                    {activeContextVariable}
+                    <svg className="w-5 h-5 ml-2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </h3>
+                </div>
+                <p className="text-gray-300 text-sm">
+                  {variableDescriptions[activeContextVariable]}
+                </p>
+              </div>
             </div>
-            <p className={`text-gray-300 text-sm transition-opacity duration-300 delay-200 ${
-              showContextWindow ? 'opacity-100' : 'opacity-0'
-            }`}>
-              But what truly sets Switch apart is its versatility. It can be used as a scooter, a
-              bike, or even a skateboard, making it suitable for people of all ages. Whether
-              you're a student, a professional, or a senior citizen, Switch adapts to your
-              needs and lifestyle.
-            </p>
-          </div>
+          )}
         </div>
 
         {/* Collapsible Sections */}
-        <div className="mt-8 space-y-4">
+        <div className="space-y-4">
           <CollapseSection title="Primary Variables" />
           <CollapseSection title="Secondary Variables" />
         </div>

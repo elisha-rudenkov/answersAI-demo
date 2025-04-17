@@ -7,16 +7,18 @@ type ThemeProviderProps = {
   children: React.ReactNode
 }
 
+type Theme = 'light' | 'dark'
+
 // Add setTheme method to the context
 type ThemeContextType = ReturnType<typeof useTheme> & {
-  setTheme: (theme: 'dark' | 'light') => void
+  setTheme: React.Dispatch<React.SetStateAction<Theme>>
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const themeValue = useTheme()
-  const [theme, setThemeState] = React.useState<'dark' | 'light'>(themeValue.theme)
+  const [theme, setThemeState] = React.useState<Theme>(themeValue.theme)
 
   // Always enforce dark mode on initial load
   useEffect(() => {
@@ -35,18 +37,13 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     setThemeState(prevTheme => prevTheme === 'dark' ? 'light' : 'dark')
   }
 
-  // Explicit method to force a specific theme
-  const setTheme = (newTheme: 'dark' | 'light') => {
-    setThemeState(newTheme)
-  }
-
   return (
     <ThemeContext.Provider 
       value={{ 
         ...themeValue,
         theme, // Use our state-controlled theme
         toggleTheme, // Use our custom toggle
-        setTheme // Add direct theme setter
+        setTheme: setThemeState // Pass setThemeState as setTheme
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import { Routes, Route, Outlet } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './firebase';
@@ -18,7 +18,7 @@ const Login = lazy(() => import('./pages/Login'));
 
 function App() {
   // Pre-load auth state at the app level
-  const [user, loading] = useAuthState(auth);
+  const [, ] = useAuthState(auth);
   
   return (
     <ThemeProvider>
